@@ -8,8 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-<!-- Tableau Embedding API v3 (renders the live EV dashboard once this page is hosted) -->
-<script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
 <style>
   :root{
     --ink:#16263D;
@@ -173,66 +171,35 @@
   </div>
 </section>
 
-<!-- ================= LIVE DASHBOARD (EV) ================= -->
-<section class="sec" id="livedash">
-  <div class="wrap">
-    <div class="sechead">
-      <h3>Live interactive dashboard</h3>
-      <span class="tag">Tableau &middot; public</span>
-    </div>
-    <div class="feature">
-      <div class="bar">
-        <span class="t">EV Market Adoption in Washington State</span>
-        <span class="m">1.58M registrations &middot; 2015&ndash;2024 &middot; <b>14&times;</b> adoption growth &middot; BEV <b>76%</b></span>
-      </div>
-      <div class="vizbox">
-        <!-- Live embed. Confirm the src matches your published view; adjust the path if Tableau renamed it. -->
-        <tableau-viz
-          id="evViz"
-          src="https://public.tableau.com/views/UnderstandingEVRegistrationinWA/Story1"
-          toolbar="bottom"
-          hide-tabs>
-        </tableau-viz>
-        <!-- Shown only if the embed cannot load (e.g. offline preview) -->
-        <div class="vizfallback" id="vizFallback">
-          <p class="mono">LIVE TABLEAU EMBED LOADS WHEN THIS PAGE IS HOSTED</p>
-          <a href="https://public.tableau.com/app/profile/angela.kim5191/viz/UnderstandingEVRegistrationinWA/Story1" target="_blank" rel="noopener">Open the dashboard on Tableau Public &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= PROJECT GRID ================= -->
 <section class="sec" id="projects">
   <div class="wrap">
     <div class="sechead">
       <h3>Projects</h3>
-      <span class="tag">Geospatial &middot; ML &middot; analysis</span>
+      <span class="tag">Consulting &middot; AI &middot; ML &middot; geospatial</span>
     </div>
     <div class="grid">
 
-      <!-- Atlanta Food Deserts -->
+      <!-- 1. ACHP -->
       <article class="card">
         <div class="thumb">
-          <!-- SWAP: replace src with your map screenshot, e.g. assets/food-deserts.png -->
-          <img src="assets/food-deserts.png" alt="ArcGIS choropleth maps of Atlanta food deserts" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="ph" style="display:none"><span class="mono">FOOD DESERTS &middot; ARCGIS</span><span class="mono">add assets/food-deserts.png</span></div>
+          <img src="assets/achp.png" alt="ACHP drug-benefit analysis" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">DRUG-BENEFIT ANALYSIS &middot; PYTHON</span><span class="mono">add assets/achp.png</span></div>
         </div>
         <div class="cardbody">
-          <div class="top"><span class="swatch" style="background:var(--amber)"></span><h4>Atlanta Food Deserts</h4></div>
-          <p>Geospatial analysis of food-desert demographics across 11 Atlanta-area counties, joining USDA Food Access, Census Tract, and ACS data into choropleth maps for policy targeting.</p>
-          <div class="metrics"><span>ArcGIS</span><span>11 counties</span><span>6 demographic layers</span></div>
+          <div class="top"><span class="swatch" style="background:#2C7A5B"></span><h4>ACHP Drug Benefit Analysis (Graduate Consultant)</h4></div>
+          <p>Graduate-consultant analysis of 109K+ records in Python, surfacing competitor cost-shifting that eroded Part D drug benefits at 4.5&times; the rate of ACHP plans. Presented to the executive board; top 3 of 16 teams.</p>
+          <div class="metrics"><span>Python</span><span>109K+ records</span><span>regression</span><span>top 3 / 16</span></div>
           <div class="links">
-            <a href="#" target="_blank" rel="noopener" data-swap="drive">View presentation &rarr;</a>
+            <a href="https://github.com/angela00kim/data-portfolio/tree/main/02-achp-medicare-analytics" target="_blank" rel="noopener">GitHub &rarr;</a>
           </div>
         </div>
       </article>
 
-      <!-- Inventory Optimization Agentic AI -->
+      <!-- 2. Inventory Optimization Agentic AI -->
       <article class="card">
         <div class="thumb">
-          <img src="assets/agentic-ai.png" alt="Agentic AI inventory optimization system diagram" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <img src="assets/agentic-ai.png" alt="Agentic AI inventory optimization system" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="ph" style="display:none"><span class="mono">AGENTIC AI &middot; LANGGRAPH</span><span class="mono">add assets/agentic-ai.png</span></div>
         </div>
         <div class="cardbody">
@@ -240,39 +207,55 @@
           <p>A 7-node LangGraph multi-agent system automating SQL retrieval, anomaly detection, and demand forecasting across 500 SKUs, compressing a 2-day process to ~15 seconds, with an LLM-as-judge evaluation framework.</p>
           <div class="metrics"><span>Python</span><span>LangGraph</span><span>500 SKUs</span><span>94% eval</span></div>
           <div class="links">
-            <a href="https://github.com/angela00kim/data-portfolio" target="_blank" rel="noopener">GitHub &rarr;</a>
+            <a href="https://github.com/angela00kim/data-portfolio/tree/main/01-inventory-optimization-ai-agent" target="_blank" rel="noopener">GitHub &rarr;</a>
           </div>
         </div>
       </article>
 
-      <!-- Fraud & Abuse Detection ML -->
+      <!-- 3. Fraud & Abuse Detection ML -->
       <article class="card">
         <div class="thumb">
           <img src="assets/fraud-ml.png" alt="AWS fraud and abuse detection pipeline" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="ph" style="display:none"><span class="mono">FRAUD ML &middot; AWS</span><span class="mono">add assets/fraud-ml.png</span></div>
         </div>
         <div class="cardbody">
-          <div class="top"><span class="swatch" style="background:#7A4E7E"></span><h4>Fraud &amp; Abuse Detection ML</h4></div>
+          <div class="top"><span class="swatch" style="background:#7A4E7E"></span><h4>Fraud &amp; Abuse Detection ML (AWS)</h4></div>
           <p>A distributed PySpark pipeline on AWS EMR/Hive for spam detection (0.98 AUC), plus a computer-vision pipeline (Rekognition, Lambda, S3) flagging self-checkout theft in under one second at a 1.0 F1 score.</p>
           <div class="metrics"><span>PySpark</span><span>AWS EMR</span><span>0.98 AUC</span><span>1.0 F1</span></div>
           <div class="links">
-            <a href="https://github.com/angela00kim/data-portfolio" target="_blank" rel="noopener">GitHub &rarr;</a>
+            <a href="https://github.com/angela00kim/data-portfolio/tree/main/08-aws-cloud-ml" target="_blank" rel="noopener">GitHub &rarr;</a>
           </div>
         </div>
       </article>
 
-      <!-- ACHP Consulting -->
+      <!-- 4. EV Market Adoption (Tableau) -->
       <article class="card">
         <div class="thumb">
-          <img src="assets/achp.png" alt="ACHP policy analysis visualization" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="ph" style="display:none"><span class="mono">POLICY ANALYSIS &middot; PYTHON</span><span class="mono">add assets/achp.png</span></div>
+          <img src="assets/ev.png" alt="EV market adoption Tableau dashboard" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">EV MARKET ADOPTION &middot; TABLEAU</span><span class="mono">add assets/ev.png</span></div>
         </div>
         <div class="cardbody">
-          <div class="top"><span class="swatch" style="background:#2C7A5B"></span><h4>ACHP Drug-Benefit Analysis</h4></div>
-          <p>Graduate consulting analysis of 109K+ records in Python, surfacing competitor cost-shifting that eroded Part D drug benefits at 4.5&times; the rate of ACHP plans. Presented to the executive board; top 3 of 16 teams.</p>
-          <div class="metrics"><span>Python</span><span>109K+ records</span><span>regression</span><span>top 3 / 16</span></div>
+          <div class="top"><span class="swatch" style="background:var(--teal)"></span><h4>EV Market Adoption Analysis (Tableau)</h4></div>
+          <p>Interactive Tableau dashboard on 1.58M Washington EV registration records (2015&ndash;2024), quantifying a 14&times; adoption rise and BEV dominance at 76% through county choropleths and VIN-decoded analysis.</p>
+          <div class="metrics"><span>Tableau</span><span>1.58M records</span><span>14&times; growth</span><span>choropleth</span></div>
           <div class="links">
-            <a href="#" target="_blank" rel="noopener" data-swap="drive">View deck &rarr;</a>
+            <a href="https://public.tableau.com/app/profile/angela.kim5191/viz/UnderstandingEVRegistrationinWA/Story1" target="_blank" rel="noopener">View on Tableau Public &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. Atlanta Food Deserts (ArcGIS) -->
+      <article class="card">
+        <div class="thumb">
+          <img src="assets/food-deserts.png" alt="ArcGIS choropleth maps of Atlanta food deserts" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">FOOD DESERTS &middot; ARCGIS</span><span class="mono">add assets/food-deserts.png</span></div>
+        </div>
+        <div class="cardbody">
+          <div class="top"><span class="swatch" style="background:var(--amber)"></span><h4>Atlanta Food Deserts Geospatial Analysis (ArcGIS)</h4></div>
+          <p>Geospatial analysis of food-desert demographics across 11 Atlanta-area counties, joining USDA Food Access, Census Tract, and ACS data into choropleth maps for policy targeting.</p>
+          <div class="metrics"><span>ArcGIS</span><span>11 counties</span><span>6 demographic layers</span></div>
+          <div class="links">
+            <a href="https://drive.google.com/file/d/1_g3mkyk6jnbs8CXGstGNQt6rB1WKeJos/view?usp=sharing" target="_blank" rel="noopener">View presentation &rarr;</a>
           </div>
         </div>
       </article>
@@ -286,17 +269,6 @@
     <p class="mono">Kanghee (Angela) Kim &middot; Data Portfolio &middot; angela00kim@gmail.com</p>
   </div>
 </footer>
-
-<script>
-  // If the Tableau web component fails to register (offline preview), keep the fallback visible.
-  window.addEventListener('load', function(){
-    setTimeout(function(){
-      var viz = document.getElementById('evViz');
-      var fb = document.getElementById('vizFallback');
-      if(viz && viz.shadowRoot){ fb.style.display='none'; }
-    }, 2500);
-  });
-</script>
 
 </body>
 </html>
