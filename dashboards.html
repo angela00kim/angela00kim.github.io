@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboards @ LG Electronics (ThinQ) — Angela Kim</title>
+<meta name="description" content="Production analytics dashboards designed by Angela Kim. Proprietary figures masked." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#16263D; --paper:#EBEFEE; --surface:#FFFFFF; --line:#C7D1CE;
+    --teal:#1F6F6B; --amber:#CC6B2C; --slate:#5C6B72; --maxw:1160px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;} *{transition:none!important;}}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:"Space Mono",monospace;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  .ticks{height:14px;display:flex;border-bottom:1px solid var(--line);}
+  .ticks span{flex:1;border-left:1px solid var(--line);}
+  .ticks span:first-child{border-left:none;}
+
+  header{padding:46px 0 22px;}
+  .eyebrow{font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin:0 0 16px;}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1;letter-spacing:-.02em;margin:0;}
+  .lede{color:var(--slate);font-size:16px;max-width:62ch;margin:18px 0 0;line-height:1.55;}
+  .note{margin:22px 0 0;display:inline-flex;gap:10px;align-items:flex-start;background:#FBF4E9;border:1px solid #E7D3B0;border-radius:6px;padding:11px 15px;font-size:13px;color:#7A5314;max-width:70ch;}
+  .note .mono{font-weight:700;}
+
+  .nav{display:flex;flex-wrap:wrap;gap:8px 22px;margin:26px 0 0;font-family:"Space Mono",monospace;font-size:13px;}
+  .nav a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;transition:.18s;}
+  .nav a:hover,.nav a:focus-visible{color:var(--teal);border-color:var(--teal);}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:34px 0 20px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease;}
+  .card:hover{transform:translateY(-3px);box-shadow:0 16px 36px -22px rgba(22,38,61,.55);}
+  .shot{position:relative;background:#F3F5F4;border-bottom:1px solid var(--line);cursor:zoom-in;overflow:hidden;height:230px;}
+  .shot img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
+  .shot .zoom{position:absolute;right:10px;bottom:10px;background:rgba(22,38,61,.82);color:#fff;font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.08em;padding:5px 9px;border-radius:4px;opacity:0;transition:opacity .18s;}
+  .card:hover .zoom{opacity:1;}
+  .body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1;}
+  .body h3{font-family:"Space Grotesk",sans-serif;font-size:19px;font-weight:600;margin:0;letter-spacing:-.01em;}
+  .body p{margin:0;font-size:14px;color:#33424f;line-height:1.5;}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:4px;}
+  .tags span{font-family:"Space Mono",monospace;font-size:11px;color:var(--slate);border:1px solid var(--line);border-radius:3px;padding:3px 8px;}
+
+  footer{border-top:1px solid var(--line);padding:24px 0 50px;margin-top:18px;}
+  footer .mono{font-size:12px;color:var(--slate);}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;background:rgba(15,23,33,.93);display:none;z-index:50;overflow:auto;padding:48px 20px;}
+  .lb.open{display:block;}
+  .lb img{display:block;max-width:1300px;width:100%;margin:0 auto;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .lb .cap{max-width:1300px;margin:14px auto 0;color:#C9D3D9;font-family:"Space Mono",monospace;font-size:12.5px;text-align:center;}
+  .lb .x{position:fixed;top:16px;right:20px;width:42px;height:42px;border:none;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:22px;cursor:pointer;line-height:1;}
+  .lb .x:hover{background:rgba(255,255,255,.24);}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
+  @media (max-width:760px){.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="ticks" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">LG Electronics &middot; ThinQ App</p>
+    <h1>Dashboards @ LG Electronics</h1>
+    <p class="lede">A selection of the BI dashboards I designed and shipped at LG Electronics for the ThinQ smart-appliance app (15.5M+ users), covering executive KPI reviews, the connection-and-registration funnel, SMS campaign performance, push-notification read rates, and voice-of-customer. Built in SQL and Looker. Click any dashboard to view it full size.</p>
+    <div class="note"><span class="mono">Note</span><span>These are real production dashboards with all proprietary figures masked. They demonstrate dashboard design and analytical structure, not underlying data.</span></div>
+    <nav class="nav" aria-label="Section links">
+      <a href="#d1">KPI Trend</a>
+      <a href="#d2">User Journey Funnel</a>
+      <a href="#d3">Sales · Connected · Registered</a>
+      <a href="#d4">Device-Connect vs Target</a>
+      <a href="#d5">SMS Campaigns</a>
+      <a href="#d6">App Ratings &amp; VOC</a>
+      <a href="#d7">Reviews Breakdown</a>
+      <a href="#d8">Survey &amp; QOS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+
+    <article class="card" id="d1">
+      <div class="shot" data-full="dashboard-images/kpi_overview.png" data-cap="Monthly & Weekly KPI Trend — executive scorecard">
+        <img src="dashboard-images/kpi_overview.png" alt="Monthly and Weekly KPI Trend dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>Monthly &amp; Weekly KPI Trend</h3>
+        <p>Executive scorecard tracking sales, connection, and registration KPIs across monthly and weekly cadences, with year-over-year trend lines and a dense pivot of cumulative, YTD, month, and week metrics.</p>
+        <div class="tags"><span>Looker</span><span>KPI Design</span><span>SQL</span><span>Exec Reporting</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d2">
+      <div class="shot" data-full="dashboard-images/funnel.png" data-cap="ThinQ User Journey — conversion funnel">
+        <img src="dashboard-images/funnel.png" alt="ThinQ User Journey conversion funnel dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>User Journey Funnel</h3>
+        <p>End-to-end conversion funnel from sales through app download, account creation, device connection, and registration, with both cumulative and incremental views and product-level drilldown.</p>
+        <div class="tags"><span>Funnel Analysis</span><span>Conversion</span><span>Looker</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d3">
+      <div class="shot" data-full="dashboard-images/sale_connected_registered.png" data-cap="Sales, Connected, Registered — volume & rate pivots">
+        <img src="dashboard-images/sale_connected_registered.png" alt="Sales, Connected, Registered products dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>Sales · Connected · Registered</h3>
+        <p>Product-level volume and rate tracking across cumulative and incremental views, with month-over-month and week-over-week pivot tables and incremental trend charts.</p>
+        <div class="tags"><span>SQL</span><span>Pivot Tables</span><span>Rate Analysis</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d4">
+      <div class="shot" data-full="dashboard-images/monthly_target.png" data-cap="Monthly Device-Connect vs Target">
+        <img src="dashboard-images/monthly_target.png" alt="Monthly device connect versus target dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>Device-Connect vs Target</h3>
+        <p>Device-connection performance measured against monthly targets, with accumulative and incremental trends and category breakdowns across home-appliance and home-entertainment products.</p>
+        <div class="tags"><span>Target Tracking</span><span>Looker</span><span>Category Drilldown</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d5">
+      <div class="shot" data-full="dashboard-images/sms_activities.png" data-cap="SMS Campaign Activity — conversion & lead time">
+        <img src="dashboard-images/sms_activities.png" alt="SMS campaign activity dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>SMS Campaign Activity</h3>
+        <p>Account-creation SMS campaign performance by send date, with sign-up conversion, registration rate, and registration lead-time analysis across monthly and weekly cohorts.</p>
+        <div class="tags"><span>Campaign Analytics</span><span>Cohort</span><span>Conversion</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d6">
+      <div class="shot" data-full="dashboard-images/app_rating_reviews.png" data-cap="App Ratings & VOC Overview">
+        <img src="dashboard-images/app_rating_reviews.png" alt="App ratings and voice-of-customer overview dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>App Ratings &amp; VOC Overview</h3>
+        <p>App rating trends for AOS and iOS alongside voice-of-customer review volume, with multi-level review breakdowns and positive-sentiment tracking over time.</p>
+        <div class="tags"><span>VOC</span><span>Sentiment</span><span>Looker</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d7">
+      <div class="shot" data-full="dashboard-images/app_reviews_breakdown.png" data-cap="App Reviews Breakdown — taxonomy & proposals">
+        <img src="dashboard-images/app_reviews_breakdown.png" alt="App reviews breakdown and proposal dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>App Reviews Breakdown</h3>
+        <p>Structured review taxonomy by level over time, ranked top pain-point categories, and a product-improvement proposal tracker feeding the engineering and UX roadmap.</p>
+        <div class="tags"><span>VOC Taxonomy</span><span>SQL Classification</span><span>Roadmap</span></div>
+      </div>
+    </article>
+
+    <article class="card" id="d8">
+      <div class="shot" data-full="dashboard-images/Survey___Email.png" data-cap="ThinQ Care Survey & QOS Emails">
+        <img src="dashboard-images/Survey___Email.png" alt="Care survey and QOS email dashboard" loading="lazy" />
+        <span class="zoom">CLICK TO ENLARGE</span>
+      </div>
+      <div class="body">
+        <h3>Care Survey &amp; QOS Emails</h3>
+        <p>Survey volume and quality-of-service scoring across year-over-year and time-series views, with sentiment breakdowns and email-campaign volume tracking.</p>
+        <div class="tags"><span>Survey Analytics</span><span>QOS</span><span>Sentiment</span></div>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap"><p class="mono">Kanghee (Angela) Kim · Dashboards @ LG Electronics (ThinQ App) · proprietary figures masked</p></div>
+</footer>
+
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Dashboard full view">
+  <button class="x" id="lbClose" aria-label="Close">&times;</button>
+  <img id="lbImg" src="" alt="" />
+  <p class="cap mono" id="lbCap"></p>
+</div>
+
+<script>
+  const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap'),lbClose=document.getElementById('lbClose');
+  let lastFocus=null;
+  document.querySelectorAll('.shot').forEach(s=>{
+    s.setAttribute('tabindex','0');s.setAttribute('role','button');
+    const open=()=>{lastFocus=s;lbImg.src=s.dataset.full;lbImg.alt=s.querySelector('img').alt;lbCap.textContent=s.dataset.cap||'';lb.classList.add('open');lbClose.focus();document.body.style.overflow='hidden';};
+    s.addEventListener('click',open);
+    s.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+  });
+  function close(){lb.classList.remove('open');lbImg.src='';document.body.style.overflow='';if(lastFocus)lastFocus.focus();}
+  lbClose.addEventListener('click',close);
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lb.classList.contains('open'))close();});
+</script>
+</body>
+</html>

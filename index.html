@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Angela Kim — Data Portfolio</title>
+<meta name="description" content="Kanghee (Angela) Kim — data analytics portfolio. Dashboards, geospatial analysis, and ML systems." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- Tableau Embedding API v3 (renders the live EV dashboard once this page is hosted) -->
+<script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
+<style>
+  :root{
+    --ink:#16263D;
+    --paper:#EBEFEE;
+    --surface:#F7F9F8;
+    --teal:#1F6F6B;
+    --amber:#CC6B2C;
+    --slate:#5C6B72;
+    --line:#C7D1CE;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;} *{animation:none!important;transition:none!important;}}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+  .mono{font-family:"Space Mono",monospace;}
+
+  /* ---- coordinate tick rule (signature) ---- */
+  .ticks{height:14px;display:flex;gap:0;border-bottom:1px solid var(--line);}
+  .ticks span{flex:1;border-left:1px solid var(--line);}
+  .ticks span:first-child{border-left:none;}
+
+  /* ---- header ---- */
+  header{padding:48px 0 8px;}
+  .eyebrow{font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin:0 0 18px;}
+  .hero{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:end;}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(40px,7vw,76px);line-height:.98;letter-spacing:-.02em;margin:0;}
+  h1 .sub{display:block;font-weight:500;font-size:clamp(15px,2vw,19px);letter-spacing:0;color:var(--slate);margin-top:18px;max-width:34ch;line-height:1.5;}
+  .legend{border:1px solid var(--line);background:var(--surface);padding:18px 20px;}
+  .legend h2{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin:0 0 14px;font-weight:700;}
+  .legend ul{list-style:none;margin:0;padding:0;display:grid;gap:11px;}
+  .legend li{display:flex;align-items:baseline;gap:12px;font-family:"Space Mono",monospace;font-size:13px;}
+  .legend .v{font-weight:700;color:var(--ink);min-width:74px;}
+  .legend .k{color:var(--slate);font-size:12px;}
+  .swatch{width:10px;height:10px;flex:none;align-self:center;}
+
+  .contact{display:flex;flex-wrap:wrap;gap:8px 22px;margin:30px 0 0;font-family:"Space Mono",monospace;font-size:13px;}
+  .contact a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color .18s,color .18s;}
+  .contact a:hover,.contact a:focus-visible{color:var(--teal);border-color:var(--teal);}
+
+  /* ---- section heads ---- */
+  .sec{padding:60px 0 0;}
+  .sechead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 22px;border-bottom:1px solid var(--line);padding-bottom:12px;}
+  .sechead h3{font-family:"Space Grotesk",sans-serif;font-size:22px;font-weight:600;letter-spacing:-.01em;margin:0;}
+  .sechead .tag{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);}
+
+  /* ---- featured viz ---- */
+  .feature{border:1px solid var(--line);background:var(--surface);}
+  .feature .bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);}
+  .feature .bar .t{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:16px;}
+  .feature .bar .m{font-family:"Space Mono",monospace;font-size:12px;color:var(--slate);}
+  .feature .bar .m b{color:var(--amber);font-weight:700;}
+  .vizbox{position:relative;min-height:520px;}
+  tableau-viz{width:100%;display:block;}
+  .vizfallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:30px;background:repeating-linear-gradient(45deg,#fff,#fff 12px,#f1f4f3 12px,#f1f4f3 24px);}
+  .vizfallback .mono{font-size:12px;color:var(--slate);letter-spacing:.1em;}
+  .vizfallback a{font-family:"Space Grotesk",sans-serif;font-weight:600;color:var(--teal);}
+
+  /* ---- project grid ---- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .card{border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 30px -18px rgba(22,38,61,.5);}
+  .thumb{position:relative;aspect-ratio:16/9;background:var(--ink);overflow:hidden;border-bottom:1px solid var(--line);}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .thumb .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;background:linear-gradient(135deg,#16263D,#1F6F6B);}
+  .thumb .ph .mono{font-size:11px;letter-spacing:.14em;opacity:.85;text-align:center;padding:0 16px;}
+  .cardbody{padding:18px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .cardbody .top{display:flex;align-items:center;gap:10px;}
+  .cardbody h4{font-family:"Space Grotesk",sans-serif;font-size:18px;font-weight:600;margin:0;letter-spacing:-.01em;}
+  .cardbody p{margin:0;font-size:14.5px;color:#2c3d4f;}
+  .metrics{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+  .metrics span{font-family:"Space Mono",monospace;font-size:11px;color:var(--slate);border:1px solid var(--line);padding:3px 8px;border-radius:2px;}
+  .links{margin-top:auto;display:flex;gap:16px;padding-top:6px;}
+  .links a{font-family:"Space Mono",monospace;font-size:12.5px;text-decoration:none;color:var(--teal);border-bottom:1px solid transparent;transition:border-color .18s;}
+  .links a:hover,.links a:focus-visible{border-color:var(--teal);}
+  .links a[aria-disabled="true"]{color:var(--slate);pointer-events:none;}
+
+  .featlede{font-size:15px;color:var(--slate);max-width:74ch;margin:0 0 20px;line-height:1.55;}
+  .dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;text-decoration:none;color:inherit;}
+  .dashgrid figure{margin:0;border:1px solid var(--line);background:var(--surface);overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;}
+  .dashgrid figure:hover{transform:translateY(-3px);box-shadow:0 16px 36px -22px rgba(22,38,61,.55);}
+  .dashgrid img{width:100%;height:200px;object-fit:cover;object-position:top center;display:block;border-bottom:1px solid var(--line);}
+  .dashgrid figcaption{padding:11px 14px;font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600;}
+  .dashcta{display:inline-block;margin:18px 0 0;font-family:"Space Mono",monospace;font-size:14px;color:var(--teal);text-decoration:none;border-bottom:1px solid var(--teal);padding-bottom:2px;}
+  .dashcta:hover,.dashcta:focus-visible{color:var(--ink);border-color:var(--ink);}
+  @media (max-width:760px){.dashgrid{grid-template-columns:1fr;}}
+
+  footer{margin-top:70px;border-top:1px solid var(--line);padding:26px 0 50px;}
+  footer .mono{font-size:12px;color:var(--slate);}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;}
+
+  @media (max-width:820px){
+    .hero{grid-template-columns:1fr;gap:28px;align-items:start;}
+    .grid{grid-template-columns:1fr;}
+    .vizbox{min-height:60vw;}
+  }
+</style>
+</head>
+<body>
+
+<div class="ticks" aria-hidden="true">
+  <!-- 24 coordinate ticks -->
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Data Analytics &middot; Dashboards &middot; Geospatial &middot; ML Systems</p>
+    <div class="hero">
+      <div>
+        <h1>Angela Kim
+          <span class="sub">Data analyst building trustworthy pipelines, decision-ready dashboards, and the analysis behind them. MS in Business Analytics &amp; AI, Johns Hopkins.</span>
+        </h1>
+      </div>
+      <div class="legend" aria-label="Selected project metrics">
+        <h2>Selected Figures</h2>
+        <ul>
+          <li><span class="swatch" style="background:var(--teal)"></span><span class="v">15.5M</span><span class="k">users, ThinQ dashboards</span></li>
+          <li><span class="swatch" style="background:var(--amber)"></span><span class="v">1.58M</span><span class="k">EV records, Tableau</span></li>
+          <li><span class="swatch" style="background:#3D5A80"></span><span class="v">11 cty</span><span class="k">geospatial food-desert study</span></li>
+          <li><span class="swatch" style="background:#7A4E7E"></span><span class="v">500 SKU</span><span class="k">agentic AI optimization</span></li>
+          <li><span class="swatch" style="background:#2C7A5B"></span><span class="v">109K+</span><span class="k">records, policy analysis</span></li>
+        </ul>
+      </div>
+    </div>
+    <nav class="contact" aria-label="Contact links">
+      <a href="mailto:angela00kim@gmail.com">angela00kim@gmail.com</a>
+      <a href="https://www.linkedin.com/in/kanghee-angela-kim" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/angela00kim/data-portfolio" target="_blank" rel="noopener">GitHub</a>
+      <a href="dashboards.html">Dashboards &rarr;</a>
+      <span aria-hidden="true">Seattle &middot; SF Bay &middot; Open to relocation</span>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= FEATURED: THINQ PRODUCTION DASHBOARDS ================= -->
+<section class="sec" id="dashboards">
+  <div class="wrap">
+    <div class="sechead">
+      <h3>Dashboards @ LG Electronics</h3>
+      <span class="tag">ThinQ app &middot; Looker &middot; SQL</span>
+    </div>
+    <p class="featlede">The BI dashboards I designed and shipped at LG Electronics for the ThinQ smart-appliance app (15.5M+ users), covering executive KPI reviews, the connection-and-registration funnel, SMS campaign performance, push-notification read rates, and voice-of-customer. Built in SQL and Looker. Proprietary figures masked.</p>
+    <a class="dashgrid" href="dashboards.html" aria-label="View the full ThinQ dashboard gallery">
+      <figure><img src="dashboard-images/kpi_overview.png" alt="Monthly and Weekly KPI Trend dashboard" loading="lazy" /><figcaption>Monthly &amp; Weekly KPI Trend</figcaption></figure>
+      <figure><img src="dashboard-images/funnel.png" alt="ThinQ User Journey funnel dashboard" loading="lazy" /><figcaption>User Journey Funnel</figcaption></figure>
+      <figure><img src="dashboard-images/app_rating_reviews.png" alt="App ratings and voice-of-customer dashboard" loading="lazy" /><figcaption>App Ratings &amp; VOC</figcaption></figure>
+      <figure><img src="dashboard-images/sms_activities.png" alt="SMS campaign activity dashboard" loading="lazy" /><figcaption>SMS Campaign Activity</figcaption></figure>
+    </a>
+    <a class="dashcta" href="dashboards.html">View all 8 dashboards &rarr;</a>
+  </div>
+</section>
+
+<!-- ================= LIVE DASHBOARD (EV) ================= -->
+<section class="sec" id="livedash">
+  <div class="wrap">
+    <div class="sechead">
+      <h3>Live interactive dashboard</h3>
+      <span class="tag">Tableau &middot; public</span>
+    </div>
+    <div class="feature">
+      <div class="bar">
+        <span class="t">EV Market Adoption in Washington State</span>
+        <span class="m">1.58M registrations &middot; 2015&ndash;2024 &middot; <b>14&times;</b> adoption growth &middot; BEV <b>76%</b></span>
+      </div>
+      <div class="vizbox">
+        <!-- Live embed. Confirm the src matches your published view; adjust the path if Tableau renamed it. -->
+        <tableau-viz
+          id="evViz"
+          src="https://public.tableau.com/views/UnderstandingEVRegistrationinWA/Story1"
+          toolbar="bottom"
+          hide-tabs>
+        </tableau-viz>
+        <!-- Shown only if the embed cannot load (e.g. offline preview) -->
+        <div class="vizfallback" id="vizFallback">
+          <p class="mono">LIVE TABLEAU EMBED LOADS WHEN THIS PAGE IS HOSTED</p>
+          <a href="https://public.tableau.com/app/profile/angela.kim5191/viz/UnderstandingEVRegistrationinWA/Story1" target="_blank" rel="noopener">Open the dashboard on Tableau Public &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECT GRID ================= -->
+<section class="sec" id="projects">
+  <div class="wrap">
+    <div class="sechead">
+      <h3>Projects</h3>
+      <span class="tag">Geospatial &middot; ML &middot; analysis</span>
+    </div>
+    <div class="grid">
+
+      <!-- Atlanta Food Deserts -->
+      <article class="card">
+        <div class="thumb">
+          <!-- SWAP: replace src with your map screenshot, e.g. assets/food-deserts.png -->
+          <img src="assets/food-deserts.png" alt="ArcGIS choropleth maps of Atlanta food deserts" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">FOOD DESERTS &middot; ARCGIS</span><span class="mono">add assets/food-deserts.png</span></div>
+        </div>
+        <div class="cardbody">
+          <div class="top"><span class="swatch" style="background:var(--amber)"></span><h4>Atlanta Food Deserts</h4></div>
+          <p>Geospatial analysis of food-desert demographics across 11 Atlanta-area counties, joining USDA Food Access, Census Tract, and ACS data into choropleth maps for policy targeting.</p>
+          <div class="metrics"><span>ArcGIS</span><span>11 counties</span><span>6 demographic layers</span></div>
+          <div class="links">
+            <a href="#" target="_blank" rel="noopener" data-swap="drive">View presentation &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Inventory Optimization Agentic AI -->
+      <article class="card">
+        <div class="thumb">
+          <img src="assets/agentic-ai.png" alt="Agentic AI inventory optimization system diagram" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">AGENTIC AI &middot; LANGGRAPH</span><span class="mono">add assets/agentic-ai.png</span></div>
+        </div>
+        <div class="cardbody">
+          <div class="top"><span class="swatch" style="background:#3D5A80"></span><h4>Inventory Optimization Agentic AI</h4></div>
+          <p>A 7-node LangGraph multi-agent system automating SQL retrieval, anomaly detection, and demand forecasting across 500 SKUs, compressing a 2-day process to ~15 seconds, with an LLM-as-judge evaluation framework.</p>
+          <div class="metrics"><span>Python</span><span>LangGraph</span><span>500 SKUs</span><span>94% eval</span></div>
+          <div class="links">
+            <a href="https://github.com/angela00kim/data-portfolio" target="_blank" rel="noopener">GitHub &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Fraud & Abuse Detection ML -->
+      <article class="card">
+        <div class="thumb">
+          <img src="assets/fraud-ml.png" alt="AWS fraud and abuse detection pipeline" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">FRAUD ML &middot; AWS</span><span class="mono">add assets/fraud-ml.png</span></div>
+        </div>
+        <div class="cardbody">
+          <div class="top"><span class="swatch" style="background:#7A4E7E"></span><h4>Fraud &amp; Abuse Detection ML</h4></div>
+          <p>A distributed PySpark pipeline on AWS EMR/Hive for spam detection (0.98 AUC), plus a computer-vision pipeline (Rekognition, Lambda, S3) flagging self-checkout theft in under one second at a 1.0 F1 score.</p>
+          <div class="metrics"><span>PySpark</span><span>AWS EMR</span><span>0.98 AUC</span><span>1.0 F1</span></div>
+          <div class="links">
+            <a href="https://github.com/angela00kim/data-portfolio" target="_blank" rel="noopener">GitHub &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ACHP Consulting -->
+      <article class="card">
+        <div class="thumb">
+          <img src="assets/achp.png" alt="ACHP policy analysis visualization" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <div class="ph" style="display:none"><span class="mono">POLICY ANALYSIS &middot; PYTHON</span><span class="mono">add assets/achp.png</span></div>
+        </div>
+        <div class="cardbody">
+          <div class="top"><span class="swatch" style="background:#2C7A5B"></span><h4>ACHP Drug-Benefit Analysis</h4></div>
+          <p>Graduate consulting analysis of 109K+ records in Python, surfacing competitor cost-shifting that eroded Part D drug benefits at 4.5&times; the rate of ACHP plans. Presented to the executive board; top 3 of 16 teams.</p>
+          <div class="metrics"><span>Python</span><span>109K+ records</span><span>regression</span><span>top 3 / 16</span></div>
+          <div class="links">
+            <a href="#" target="_blank" rel="noopener" data-swap="drive">View deck &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="mono">Kanghee (Angela) Kim &middot; Data Portfolio &middot; angela00kim@gmail.com</p>
+  </div>
+</footer>
+
+<script>
+  // If the Tableau web component fails to register (offline preview), keep the fallback visible.
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      var viz = document.getElementById('evViz');
+      var fb = document.getElementById('vizFallback');
+      if(viz && viz.shadowRoot){ fb.style.display='none'; }
+    }, 2500);
+  });
+</script>
+
+</body>
+</html>
